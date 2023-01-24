@@ -1,9 +1,17 @@
-import React from 'react'
+import React from "react";
+import NavBar from "./components/navbar/NavBar";
+import ProtectedRoutes from "./app/routes/ProtectedRoutes";
+import UnProtectedRoutes from "./app/routes/UnProtectedRoutes";
 
 const App = () => {
+  const user = "mike";
   return (
-    <div>App</div>
-  )
-}
+    <>
+      <NavBar />
 
-export default App
+      {user ? <ProtectedRoutes /> : <UnProtectedRoutes />}
+    </>
+  );
+};
+
+export default App;
