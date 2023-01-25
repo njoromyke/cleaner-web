@@ -78,6 +78,85 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <section class="middle">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+              <div class="sec_title position-relative text-center mb-5">
+                <h6 class="text-muted mb-0">Trending Jobs</h6>
+                <h2 class="ft-bold">All Popular Listed jobs</h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="row align-items-center">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <div class="job_grid border rounded ">
+                <div class="position-absolute ab-left">
+                  <button
+                    type="button"
+                    class="p-3 border circle d-flex align-items-center justify-content-center bg-white text-gray"
+                  >
+                    <i class="lni lni-heart-filled position-absolute snackbar-wishlist"></i>
+                  </button>
+                </div>
+                <div class="position-absolute ab-right">
+                  <span class="medium theme-cl theme-bg-light px-2 py-1 rounded">
+                    Full Time
+                  </span>
+                </div>
+                <div class="job_grid_thumb mb-3 pt-5 px-3">
+                  <a href="job-detail.html" class="d-block text-center m-auto">
+                    <img
+                      src="https://via.placeholder.com/120x120"
+                      class="img-fluid"
+                      width="70"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div class="job_grid_caption text-center pb-5 px-3">
+                  <h6 class="mb-0 lh-1 ft-medium medium">
+                    <a href="employer-detail.html" class="text-muted medium">
+                      ratings here
+                    </a>
+                  </h6>
+                  <h4 class="mb-0 ft-medium medium">
+                    <a href="job-detail.html" class="text-dark fs-md">
+                      Laundry
+                    </a>
+                  </h4>
+                  <div class="jbl_location">
+                    <i class="lni lni-map-marker mr-1"></i>
+                    <span>San Francisco</span>
+                  </div>
+                </div>
+                <div class="job_grid_footer pb-4 px-3 d-flex align-items-center justify-content-between">
+                  <div class="df-1 text-muted">
+                    <i class="lni lni-wallet mr-1"></i>$50k - $80k PA.
+                  </div>
+                  <div class="df-1 text-muted">
+                    <i class="lni lni-timer mr-1"></i>3 days ago
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+              <div class="position-relative text-center">
+                <a
+                  href="job-search-v1.html"
+                  class="btn btn-md theme-bg-light rounded theme-cl hover-theme"
+                >
+                  Explore More Jobs
+                  <i class="lni lni-arrow-right-circle ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
