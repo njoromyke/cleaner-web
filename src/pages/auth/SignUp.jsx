@@ -63,14 +63,14 @@ const SignUp = () => {
             <h2 className="text-center">
               <span className="theme-cl">Register</span> Now
             </h2>
-            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mfliud">
-              <form class="border p-3 rounded" onSubmit={handleSubmit}>
-                <div class="row">
-                  <div class="form-group col-md-6">
+            <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 mfliud">
+              <form className="border p-3 rounded" onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="form-group col-md-6">
                     <label>First Name *</label>
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="First Name"
                       name="firstName"
                       value={formData.firstName}
@@ -79,11 +79,11 @@ const SignUp = () => {
                     />
                   </div>
 
-                  <div class="form-group col-md-6">
+                  <div className="form-group col-md-6">
                     <label>Phone Number*</label>
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Phone Number*"
                       name="phone"
                       value={formData.phone}
@@ -94,11 +94,11 @@ const SignUp = () => {
                 </div>
 
                 <div className="row">
-                  <div class="form-group col-md-6">
+                  <div className="form-group col-md-6">
                     <label>Email *</label>
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Username*"
                       name="email"
                       value={formData.email}
@@ -127,12 +127,12 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="form-group col-md-6">
+                <div className="row">
+                  <div className="form-group col-md-6">
                     <label>Password *</label>
                     <input
                       type="password"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Password*"
                       name="password"
                       value={formData.password}
@@ -141,11 +141,11 @@ const SignUp = () => {
                     />
                   </div>
 
-                  <div class="form-group col-md-6">
+                  <div className="form-group col-md-6">
                     <label>Confirm Password *</label>
                     <input
                       type="password"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Confirm Password*"
                       name="confirmPassword"
                       value={formData.confirmPassword}
@@ -155,15 +155,15 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                   <p>
                     By registering your details, you agree with our Terms &
                     Conditions, and Privacy and Cookie Policy.
                   </p>
                 </div>
 
-                <div class="form-group">
-                  <div class="d-flex align-items-center justify-content-between">
+                <div className="form-group">
+                  <div className="d-flex align-items-center justify-content-between">
                     <div className="eltio_k2">
                       <Link to="/">
                         Have an account?
@@ -173,10 +173,10 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                   <button
                     type="submit"
-                    class="btn btn-md full-width theme-bg text-light fs-md ft-medium"
+                    className="btn btn-md full-width theme-bg text-light fs-md ft-medium"
                   >
                     Create An Account
                   </button>

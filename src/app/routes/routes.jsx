@@ -4,6 +4,7 @@ import Dashboard from "../../pages/admin/dashboard/Dashboard";
 import DashboardPage from "../../pages/admin/dashboard/DashboardPage";
 import NewService from "../../pages/admin/jobs/NewService";
 import Home from "../../pages/home/Home";
+import Jobs from "../../pages/admin/jobs/Jobs";
 
 function RouterComponent() {
   const routes = [
@@ -22,7 +23,15 @@ function RouterComponent() {
           index: true,
         },
         {
+          path: "jobs",
+          element: <Jobs />,
+        },
+        {
           path: "jobs/new",
+          element: <NewService />,
+        },
+        {
+          path: "jobs/edit/:id",
           element: <NewService />,
         },
       ],

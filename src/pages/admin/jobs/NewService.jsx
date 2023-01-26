@@ -1,9 +1,36 @@
 import React, { useState } from "react";
 import { cleaning_services_types } from "../../../helpers/constants";
 import { counties } from "../../../data/conties";
+import { showNotification } from "../../../helpers/utils/notification";
+import { auth, database } from "../../../services/firebase";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import Loader from "../../../components/loader/Loader";
+import { collection, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
+import { useEffect } from "react";
 
 const NewService = () => {
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const fetchJob = () => {
+    setLoading(true);
+
+    getDoc(doc(database, "services", id))
+      .then((doc) => {
+        if (doc.exists()) {
+          setFormData(doc.data());
+        } else {
+          showNotification("Service not found");
+        }
+      })
+
+      .catch((error) => {
+        showNotification(error.message);
+      })
+      .finally(() => setLoading(false));
+  };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -11,8 +38,71 @@ const NewService = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    setLoading(true);
+
+    if (
+      !formData.title ||
+      !formData.image ||
+      !formData.type ||
+      !formData.location ||
+      !formData.description
+    )
+      showNotification("Please fill all fields");
+
+    const serviceCollection = collection(database, "services");
+
+    if (id) {
+      const service = {
+        title: formData.title,
+        image: formData.image,
+        type: formData.type,
+        location: formData.location,
+        description: formData.description,
+        ratings: formData.ratings,
+        reviews: formData.reviews,
+        createdAt: formData.createdAt,
+        owner: formData.owner,
+      };
+
+      updateDoc(doc(database, "services", id), service)
+        .then((docRef) => {
+          showNotification("Service updated successfully", "success");
+          navigate("/admin/jobs");
+        })
+        .catch((error) => {
+          showNotification(error.message);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      const service = {
+        title: formData.title,
+        image: formData.image,
+        type: formData.type,
+        location: formData.location,
+        description: formData.description,
+        ratings: 0,
+        reviews: 0,
+        createdAt: new Date().getTime(),
+        owner: auth.currentUser.email,
+      };
+
+      addDoc(serviceCollection, service)
+        .then((docRef) => {
+          showNotification("Service added successfully", "success");
+          navigate("/admin/services");
+        })
+        .catch((error) => {
+          showNotification("Error adding service");
+        })
+        .finally(() => setLoading(false));
+
+      setFormData({});
+    }
   };
+
+  useEffect(() => {
+    if (id) fetchJob();
+  }, [id]);
 
   return (
     <>
@@ -38,6 +128,7 @@ const NewService = () => {
           </div>
         </div>
       </div>
+      {loading && <Loader />}
 
       <div className="dashboard-widg-bar d-block">
         <div className="row">
@@ -68,6 +159,7 @@ const NewService = () => {
                             name="title"
                             onChange={handleInputChange}
                             value={formData.title}
+                            required
                           />
                         </div>
                       </div>
@@ -80,9 +172,10 @@ const NewService = () => {
                             type="text"
                             className="form-control rounded"
                             placeholder="Image URL"
-                            name="IMAGE"
+                            name="image"
                             onChange={handleInputChange}
                             value={formData.image}
+                            required
                           />
                         </div>
                       </div>
@@ -97,6 +190,7 @@ const NewService = () => {
                             name="type"
                             onChange={handleInputChange}
                             value={formData.type}
+                            required
                           >
                             <option defaultValue>Select Service Type</option>
                             {cleaning_services_types.map((service, index) => (
@@ -113,8 +207,9 @@ const NewService = () => {
                             Service County
                           </label>
                           <select
+                            required
                             className="form-control rounded"
-                            name="type"
+                            name="location"
                             onChange={handleInputChange}
                             value={formData.location}
                           >
@@ -133,8 +228,12 @@ const NewService = () => {
                             Service Description
                           </label>
                           <textarea
+                            required
                             className="form-control rounded"
                             placeholder="Service Description"
+                            name="description"
+                            onChange={handleInputChange}
+                            value={formData.description}
                           ></textarea>
                         </div>
                       </div>
@@ -153,14 +252,6 @@ const NewService = () => {
                 </form>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col-md-12">
-          <div className="py-3">
-            ©{new Date().getFullYear()}. Designed By Christine.
           </div>
         </div>
       </div>
