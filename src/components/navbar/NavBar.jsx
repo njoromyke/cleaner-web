@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../assets/img/logo.png";
+import { Link } from "react-router-dom";
+import { collection, getDocs } from "@firebase/firestore";
+import { auth, database } from "../../services/firebase";
+import { useEffect } from "react";
+import { ADMIN_ROLE } from "../../helpers/constants";
 
 const NavBar = () => {
+  const [user, setUser] = useState({});
+  const authenticatedUser = auth.currentUser.email;
+
+  const getLoggedInUser = () => {
+    const usersCollection = collection(database, "users");
+    getDocs(usersCollection).then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        if (doc.data().email === authenticatedUser) {
+          setUser(doc.data());
+        }
+      });
+    });
+  };
+
+  useEffect(getLoggedInUser, [authenticatedUser]);
+
+  const isAdmin = user.role === ADMIN_ROLE;
+
   return (
     <>
       <div className="header header-light dark-text sticky-top head-shadow">
@@ -40,43 +63,24 @@ const NavBar = () => {
             <div className="nav-menus-wrapper">
               <ul className="nav-menu">
                 <li>
-                  <a href="#">Home</a>
-                </li>
-
-                <li>
-                  <a href="">Find Job</a>
-                </li>
-
-                <li>
-                  <a href="">Candidates</a>
-                </li>
-
-                <li>
-                  <a href="">Employers</a>
-                </li>
-
-                <li>
-                  <a href="">Pages</a>
+                  <Link to={'/'} >Home</Link>
                 </li>
               </ul>
 
-              <ul className="nav-menu nav-menu-social align-to-right">
-                <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#login"
-                    className="ft-medium"
-                  >
-                    <i className="lni lni-user mr-2"></i>Sign In
-                  </a>
-                </li>
-                <li className="add-listing theme-bg">
-                  <a href="dashboard-post-job.html">
-                    <i className="lni lni-circle-plus mr-1"></i> Post a Job
-                  </a>
-                </li>
-              </ul>
+              {isAdmin && (
+                <ul className="nav-menu nav-menu-social align-to-right">
+                  <li>
+                    <Link to={"/admin"} className="ft-medium">
+                      <i className="lni lni-user mr-2"></i> Admin
+                    </Link>
+                  </li>
+                  <li className="add-listing theme-bg">
+                    <a href="dashboard-post-job.html">
+                      <i className="lni lni-circle-plus mr-1"></i> Post a Job
+                    </a>
+                  </li>
+                </ul>
+              )}
             </div>
           </nav>
         </div>

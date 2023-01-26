@@ -67,7 +67,7 @@ const Sidebar = () => {
         <div className="dashboard-inner">
           <ul data-submenu-title="Main Navigation">
             {pages.map((page, index) => (
-              <li>
+              <li key={index}>
                 <NavLink to={page.link}>
                   <i className={`${page.icon} mr-2`}></i>
                   {page.title}

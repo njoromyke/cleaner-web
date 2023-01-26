@@ -98,15 +98,11 @@ const NewService = () => {
                             onChange={handleInputChange}
                             value={formData.type}
                           >
+                            <option defaultValue>Select Service Type</option>
                             {cleaning_services_types.map((service, index) => (
-                              <>
-                                <option defaultValue>
-                                  Select Service Type
-                                </option>
-                                <option key={index} value={service.value}>
-                                  {service.label}
-                                </option>
-                              </>
+                              <option key={index} value={service.value}>
+                                {service.label}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -123,12 +119,9 @@ const NewService = () => {
                             value={formData.location}
                           >
                             {counties.map((location, index) => (
-                              <>
-                                <option defaultValue>Select Location</option>
-                                <option key={index} value={location.name}>
-                                  {location.name}
-                                </option>
-                              </>
+                              <option key={index} value={location.name}>
+                                {location.name}
+                              </option>
                             ))}
                           </select>
                         </div>

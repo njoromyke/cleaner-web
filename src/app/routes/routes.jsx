@@ -1,10 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "../../pages/home/Home";
-import { isAdmin } from "../../helpers/utils/auth";
-import Dashboard from "../../pages/admin/dashboard/Dashboard";
-import NewService from "../../pages/admin/jobs/NewService";
 import { ADMIN_ROLE } from "../../helpers/constants";
+import Dashboard from "../../pages/admin/dashboard/Dashboard";
 import DashboardPage from "../../pages/admin/dashboard/DashboardPage";
+import NewService from "../../pages/admin/jobs/NewService";
+import Home from "../../pages/home/Home";
 
 function RouterComponent() {
   const routes = [
@@ -20,12 +19,11 @@ function RouterComponent() {
         {
           path: "dashboard",
           element: <DashboardPage />,
-          role: ADMIN_ROLE,
+          index: true,
         },
         {
           path: "jobs/new",
           element: <NewService />,
-          role: ADMIN_ROLE,
         },
       ],
     },
@@ -33,29 +31,22 @@ function RouterComponent() {
 
   return (
     <Routes>
-      {routes.map(
-        (route, index) =>
-          isAdmin(route.role) && (
-            <Route
-              key={index}
-              path={route.path}
-              element={route.element}
-              index={route.index}
-            >
-              {route.children && (
-                <>
-                  {route.children.map((child, index) => (
-                    <Route
-                      key={index}
-                      path={child.path}
-                      element={child.element}
-                    />
-                  ))}
-                </>
-              )}
-            </Route>
-          )
-      )}
+      {routes.map((route, index) => (
+        <Route
+          key={index}
+          path={route.path}
+          element={route.element}
+          index={route.index}
+        >
+          {route.children && (
+            <>
+              {route.children.map((child, index) => (
+                <Route key={index} path={child.path} element={child.element} />
+              ))}
+            </>
+          )}
+        </Route>
+      ))}
     </Routes>
   );
 }
