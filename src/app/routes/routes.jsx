@@ -7,6 +7,7 @@ import Home from "../../pages/home/Home";
 import Jobs from "../../pages/admin/jobs/Jobs";
 import Bookings from "../../pages/admin/bookings/Bookings";
 import Users from "../../pages/admin/users/Users";
+import ViewListing from "../../pages/home/ViewListing";
 
 function RouterComponent() {
   const routes = [
@@ -14,6 +15,10 @@ function RouterComponent() {
       path: "/",
       element: <Home />,
       index: true,
+    },
+    {
+      path: "/:id",
+      element: <ViewListing />,
     },
     {
       path: "admin",
