@@ -1,12 +1,11 @@
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { addDoc, collection } from "@firebase/firestore";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { showNotification } from "../../helpers/utils/notification";
-import { createUserWithEmailAndPassword } from "@firebase/auth";
-import { auth, database } from "../../services/firebase";
-import { addDoc, collection } from "@firebase/firestore";
-import { cleaning_services_types } from "../../helpers/constants";
-import { counties } from "../../data/conties";
 import Loader from "../../components/loader/Loader";
+import { counties } from "../../data/conties";
+import { showNotification } from "../../helpers/utils/notification";
+import { auth, database } from "../../services/firebase";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});

@@ -6,6 +6,7 @@ import NewService from "../../pages/admin/jobs/NewService";
 import Home from "../../pages/home/Home";
 import Jobs from "../../pages/admin/jobs/Jobs";
 import Bookings from "../../pages/admin/bookings/Bookings";
+import Users from "../../pages/admin/users/Users";
 
 function RouterComponent() {
   const routes = [
@@ -38,6 +39,10 @@ function RouterComponent() {
         {
           path: "bookings",
           element: <Bookings />,
+        },
+        {
+          path: "users",
+          element: <Users />,
         },
       ],
     },

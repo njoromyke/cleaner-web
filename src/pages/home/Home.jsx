@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "../../assets/img/banner-4.jpg";
+import { database } from "../../services/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import Loader from "../../components/loader/Loader";
 
 const Home = () => {
+  const [services, setServices] = useState([]);
+  const servicesCollection = collection(database, "services");
+  const [loading, setLoading] = useState(false);
+
+  const fetchServices = () => {
+    setLoading(true);
+    getDocs(servicesCollection).then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        setServices((prevState) => [...prevState, doc.data()]);
+      });
+    });
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchServices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div>
+    <>
+      {loading && <Loader />}
       <div
         className="home-banner margin-bottom-0"
         data-overlay="5"
@@ -163,7 +186,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

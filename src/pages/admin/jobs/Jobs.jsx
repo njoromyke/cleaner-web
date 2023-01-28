@@ -1,12 +1,12 @@
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import React, { useState } from "react";
-import { database } from "../../../services/firebase";
-import { showNotification } from "../../../helpers/utils/notification";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loader from "../../../components/loader/Loader";
 import ModalAction from "../../../components/modal/ModalTemplate";
-import { useNavigate } from "react-router-dom";
 import { formatTimeAgo } from "../../../helpers/utils/date";
+import { showNotification } from "../../../helpers/utils/notification";
+import useLoggedInUser from "../../../hooks/useLoggedInUser";
+import { database } from "../../../services/firebase";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -16,6 +16,7 @@ const Jobs = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const { isAdmin, user } = useLoggedInUser();
 
   const fetchJobs = () => {
     setLoading(true);
@@ -26,11 +27,16 @@ const Jobs = () => {
         querySnapshot.forEach((doc) => {
           jobs.push({ ...doc.data(), id: doc.id });
         });
-        setJobs(jobs);
+
+        if (isAdmin) {
+          setJobs(jobs);
+          return;
+        } else {
+          setJobs(jobs.filter((job) => job.owner === user));
+        }
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
-        showNotification("Error fetching jobs");
+        showNotification(error.message);
       })
       .finally(() => setLoading(false));
   };
@@ -190,10 +196,7 @@ const Jobs = () => {
                         </td>
                         <td>{job.type}</td>
                         <td>
-                          <div
-                            href="dashboard-manage-applications.html"
-                            className="theme-bg text-light rounded px-3 py-2 ft-medium"
-                          >
+                          <div className="theme-bg text-light rounded px-3 py-2 ft-medium">
                             {job.location}
                           </div>
                         </td>

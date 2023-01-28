@@ -19,6 +19,11 @@ const Sidebar = () => {
       link: "/admin/jobs",
     },
     {
+      title: "Manage Users",
+      icon: "lni lni-users mr-2",
+      link: "/admin/users",
+    },
+    {
       title: "Manage Bookings",
       icon: "lni lni-briefcase mr-2",
       link: "/admin/bookings",

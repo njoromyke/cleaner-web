@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { cleaning_services_types } from "../../../helpers/constants";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Loader from "../../../components/loader/Loader";
 import { counties } from "../../../data/conties";
+import { cleaning_services_types } from "../../../helpers/constants";
 import { showNotification } from "../../../helpers/utils/notification";
 import { auth, database } from "../../../services/firebase";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import Loader from "../../../components/loader/Loader";
-import { collection, addDoc, getDoc, doc, updateDoc } from "firebase/firestore";
-import { useEffect } from "react";
 
 const NewService = () => {
   const [formData, setFormData] = useState({});

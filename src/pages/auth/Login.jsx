@@ -58,6 +58,7 @@ const Login = () => {
                     className="form-control"
                     placeholder="Password*"
                     onChange={handleChange}
+                    name="password"
                   />
                 </div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { collection, getDocs } from "firebase/firestore";
 import React, { useState } from "react";
 import { database } from "../../../services/firebase";
@@ -163,7 +164,7 @@ const Bookings = () => {
           <div class="col-lg-12 col-md-12 col-sm-12">
             <ul class="pagination">
               <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
+                <a class="page-link" href="" aria-label="Previous">
                   <span class="fas fa-arrow-circle-right"></span>
                   <span class="sr-only">Previous</span>
                 </a>
