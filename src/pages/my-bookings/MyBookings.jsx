@@ -1,27 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
-  Timestamp,
-  collection,
-  deleteDoc,
-  getDocs,
-  doc,
-  updateDoc,
+    Timestamp,
+    collection,
+    deleteDoc,
+    doc,
+    getDocs
 } from "firebase/firestore";
-import React, { useState } from "react";
-import { database } from "../../../services/firebase";
-import { useEffect } from "react";
-import { showNotification } from "../../../helpers/utils/notification";
-import Loader from "../../../components/loader/Loader";
-import { formatTimeAgo } from "../../../helpers/utils/date";
-import ModalAction from "../../../components/modal/ModalTemplate";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Loader from "../../components/loader/Loader";
+import ModalAction from "../../components/modal/ModalTemplate";
+import { showNotification } from "../../helpers/utils/notification";
+import useLoggedInUser from "../../hooks/useLoggedInUser";
+import { database } from "../../services/firebase";
 
-const Bookings = () => {
+const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const bookingsCollection = collection(database, "bookings");
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { user } = useLoggedInUser();
+  console.log(user.phone);
 
   const fetchBookings = () => {
     setLoading(true);
@@ -31,7 +32,12 @@ const Bookings = () => {
         querySnapshot.forEach((doc) => {
           bookings.push({ ...doc.data(), id: doc.id });
         });
-        setBookings(bookings);
+
+        const myBookings = bookings.filter(
+          (booking) => booking.client == user.phone
+        );
+
+        setBookings(myBookings);
       })
       .catch((error) => {
         showNotification(error.message);
@@ -44,7 +50,7 @@ const Bookings = () => {
 
     deleteDoc(doc(database, "bookings", selectedBooking.id))
       .then(() => {
-        showNotification("Service deleted successfully", "success");
+        showNotification("Booking deleted successfully", "success");
         fetchBookings();
       })
       .catch((error) => {
@@ -53,26 +59,9 @@ const Bookings = () => {
       .finally(() => setLoading(false));
   };
 
-    const handleComplete = () => {
-      setLoading(true);
-
-      updateDoc(doc(database, "bookings", selectedBooking.id), {
-        completed: true,
-        completedAt: Timestamp.now(),
-      })
-        .then(() => {
-          showNotification("Booking completed successfully", "success");
-          fetchBookings();
-        })
-        .catch((error) => {
-          showNotification(error.message);
-        })
-        .finally(() => setLoading(false));
-    };
-
   useEffect(() => {
     fetchBookings();
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -89,7 +78,7 @@ const Bookings = () => {
               setShowDeleteModal(false);
               setSelectedBooking(null);
             }}
-            title={"Delete Service"}
+            title={"Delete Booking"}
             actionVariant={"danger"}
             centered
             actionText={"Delete"}
@@ -98,25 +87,6 @@ const Bookings = () => {
           </ModalAction>
         )}
 
-        {showModal && (
-          <ModalAction
-            handleClose={() => {
-              setShowModal(false);
-              setSelectedBooking(null);
-            }}
-            handleSubmit={() => {
-              handleComplete();
-              setShowDeleteModal(false);
-              setSelectedBooking(null);
-            }}
-            title={"Mark booking as completed"}
-            actionVariant={"success"}
-            centered
-            actionText={"Mark as completed"}
-          >
-            <p>Are you sure you want to mark this booking as completed?</p>
-          </ModalAction>
-        )}
         <div class="row">
           <div class="col-xl-12 col-md-12 col-sm-12">
             <div class="cl-justify">
@@ -221,18 +191,19 @@ const Bookings = () => {
                         <td> {booking.clientName}</td>
                         <td>
                           <div className="dash-action">
-                            {!booking.completed && (
-                              <div
+                            {!booking.paymentStatus && (
+                              <Link
+                                to={`/payments/${booking.id}`}
+                                role={"button"}
                                 onClick={() => {
                                   setSelectedBooking(booking);
-                                  setShowModal(true);
                                 }}
-                                role={"button"}
-                                className="p-2 circle text-success bg-light-success d-inline-flex align-items-center justify-content-center ml-1"
+                                className="p-2 circle text-success bg-light-success d-inline-flex align-items-center justify-content-center"
                               >
-                                <i className="lni lni-checkmark-circle"></i>
-                              </div>
+                                <i className="lni lni-money-protection"></i>
+                              </Link>
                             )}
+
                             <div
                               role={"button"}
                               className="p-2 circle text-danger bg-light-danger d-inline-flex align-items-center justify-content-center ml-1"
@@ -302,4 +273,4 @@ const Bookings = () => {
   );
 };
 
-export default Bookings;
+export default MyBookings;

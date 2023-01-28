@@ -8,6 +8,8 @@ import Jobs from "../../pages/admin/jobs/Jobs";
 import Bookings from "../../pages/admin/bookings/Bookings";
 import Users from "../../pages/admin/users/Users";
 import ViewListing from "../../pages/home/ViewListing";
+import Payment from "../../pages/payment/Payment";
+import MyBookings from "../../pages/my-bookings/MyBookings";
 
 function RouterComponent() {
   const routes = [
@@ -19,6 +21,14 @@ function RouterComponent() {
     {
       path: "/:id",
       element: <ViewListing />,
+    },
+    {
+      path: "/payments/:id",
+      element: <Payment />,
+    },
+    {
+      path: "/bookings/mine",
+      element: <MyBookings />,
     },
     {
       path: "admin",

@@ -49,12 +49,16 @@ const NavBar = () => {
                     </Link>
                   </li>
                 </ul>
+                v
               </div>
             </div>
             <div className="nav-menus-wrapper">
               <ul className="nav-menu">
                 <li>
                   <Link to={"/"}>Home</Link>
+                </li>
+                <li>
+                  <Link to={"/bookings/mine"}>My Bookings</Link>
                 </li>
               </ul>
 
@@ -66,8 +70,9 @@ const NavBar = () => {
                     </Link>
                   </li>
                   <li className="add-listing theme-bg">
-                    <Link to={'/admin/jobs/new'} href="dashboard-post-job.html">
-                      <i className="lni lni-circle-plus mr-1"></i> Post a Service
+                    <Link to={"/admin/jobs/new"} href="dashboard-post-job.html">
+                      <i className="lni lni-circle-plus mr-1"></i> Post a
+                      Service
                     </Link>
                   </li>
                 </ul>

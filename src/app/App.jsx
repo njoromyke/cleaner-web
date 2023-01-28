@@ -23,7 +23,7 @@ const App = () => {
     });
 
     return unsubscribe;
-  }, []);
+  }, [user]);
 
   return (
     <div id="main-wrapper">

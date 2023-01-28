@@ -1,7 +1,18 @@
+import { signOut } from "firebase/auth";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { auth } from "../../services/firebase";
+import { showNotification } from "../../helpers/utils/notification";
 
 const Sidebar = () => {
+  const logout = () => {
+    signOut(auth).then(() => {
+      showNotification("Logged out successfully!", "success");
+      window.location.reload();
+      window.location.href = "/";
+    });
+  };
+
   const pages = [
     {
       title: "Dashboard",
@@ -29,35 +40,14 @@ const Sidebar = () => {
       link: "/admin/bookings",
     },
     {
-      title: "Packages",
-      icon: "lni lni-mastercard mr-2",
-      link: "/admin/packages",
-    },
-    {
       title: "Messages",
       icon: "lni lni-envelope mr-2",
       link: "/admin/messages",
     },
-
-    {
-      title: "My Profile",
-      icon: "lni lni-user mr-2",
-      link: "/admin/profile",
-    },
-    {
-      title: "Change Password",
-      icon: "lni lni-lock-alt mr-2",
-      link: "/admin/change-password",
-    },
-    {
-      title: "Delete Account",
-      icon: "lni lni-trash-can mr-2",
-      link: "/admin/delete-account",
-    },
     {
       title: "Log Out",
       icon: "lni lni-power-switch mr-2",
-      link: "/admin/logout",
+      onclick: logout,
     },
   ];
 
@@ -68,10 +58,17 @@ const Sidebar = () => {
           <ul data-submenu-title="Main Navigation">
             {pages.map((page, index) => (
               <li key={index}>
-                <NavLink to={page.link}>
-                  <i className={`${page.icon} mr-2`}></i>
-                  {page.title}
-                </NavLink>
+                {page.onclick ? (
+                  <NavLink to="#" onClick={page.onclick}>
+                    <i className={`${page.icon} mr-2`}></i>
+                    {page.title}
+                  </NavLink>
+                ) : (
+                  <NavLink to={page.link}>
+                    <i className={`${page.icon} mr-2`}></i>
+                    {page.title}
+                  </NavLink>
+                )}
               </li>
             ))}
           </ul>

@@ -8,6 +8,7 @@ import { formatTimeAgo } from "../../helpers/utils/date";
 import { showNotification } from "../../helpers/utils/notification";
 import { cleaning_services_types } from "../../helpers/constants";
 import { counties } from "../../data/conties";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [services, setServices] = useState([]);
@@ -191,9 +192,9 @@ const Home = () => {
                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                   <div className="job_grid border rounded ">
                     <div className="job_grid_thumb mb-3 pt-5 px-3">
-                      <a
-                        href="job-detail.html"
+                      <Link
                         className="d-block text-center m-auto"
+                        to={`/${service.id}`}
                       >
                         <img
                           src={service.image}
@@ -201,7 +202,7 @@ const Home = () => {
                           width="70"
                           alt=""
                         />
-                      </a>
+                      </Link>
                     </div>
                     <div className="job_grid_caption text-center pb-5 px-3">
                       <div className="position-absolute ab-right">
@@ -211,7 +212,8 @@ const Home = () => {
                       </div>
 
                       <h6 className="mb-0 lh-1 ft-medium medium">
-                        <a
+                        <Link
+                          to={`/${service.id}`}
                           href="employer-detail.html"
                           className="text-muted medium"
                         >
@@ -220,7 +222,7 @@ const Home = () => {
                             initialValue={service.ratings}
                             readonly
                           />
-                        </a>
+                        </Link>
                       </h6>
                       <h4 className="mb-0 ft-medium medium">
                         <a href="job-detail.html" className="text-dark fs-md">
