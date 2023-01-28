@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Loader from "../../../components/loader/Loader";
 import ModalAction from "../../../components/modal/ModalTemplate";
 import { useNavigate } from "react-router-dom";
+import { formatTimeAgo } from "../../../helpers/utils/date";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -43,7 +44,6 @@ const Jobs = () => {
         fetchJobs();
       })
       .catch((error) => {
-        console.log(error);
         showNotification(error.message);
       })
       .finally(() => setLoading(false));
@@ -91,10 +91,52 @@ const Jobs = () => {
           >
             <div className="row">
               <div className="col-md-6">
-                <p className="mb-1 theme-bg">Title</p>
+                <p className="mb-1 theme-cl">Title</p>
               </div>
               <div className="col-md-6">
                 <p className="mb-1">{selectedProduct?.title}</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1 theme-cl">Image</p>
+              </div>
+              <div className="col-md-6">
+                <img
+                  src={selectedProduct?.image}
+                  alt=""
+                  className="avatar rounded-5"
+                />
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1 theme-cl">Location</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1">{selectedProduct?.location}</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1 theme-cl">Posted At</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1">
+                  {formatTimeAgo(selectedProduct?.createdAt)}
+                </p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1 theme-cl">Ratings</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1">{selectedProduct?.ratings} Ratings</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1 theme-cl">Price</p>
+              </div>
+              <div className="col-md-6">
+                <p className="mb-1">Ksh {selectedProduct?.price}</p>
+              </div>
+              <div className="col-md-12">
+                <p className="mb-1 theme-cl">Description</p>
+              </div>
+              <div className="col-md-12">
+                <p className="mb-1">Ksh {selectedProduct?.description}</p>
               </div>
             </div>
           </ModalAction>

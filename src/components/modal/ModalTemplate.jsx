@@ -13,7 +13,7 @@ export default function ModalAction({
   handleClose,
 }) {
   return (
-    <Modal show onHide={handleClose} animation={false} centered={centered}>
+    <Modal show onHide={handleClose} animation centered={centered}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>

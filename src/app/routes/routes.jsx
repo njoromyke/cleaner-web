@@ -5,6 +5,7 @@ import DashboardPage from "../../pages/admin/dashboard/DashboardPage";
 import NewService from "../../pages/admin/jobs/NewService";
 import Home from "../../pages/home/Home";
 import Jobs from "../../pages/admin/jobs/Jobs";
+import Bookings from "../../pages/admin/bookings/Bookings";
 
 function RouterComponent() {
   const routes = [
@@ -33,6 +34,10 @@ function RouterComponent() {
         {
           path: "jobs/edit/:id",
           element: <NewService />,
+        },
+        {
+          path: "bookings",
+          element: <Bookings />,
         },
       ],
     },

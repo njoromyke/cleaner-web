@@ -84,12 +84,13 @@ const NewService = () => {
         reviews: 0,
         createdAt: new Date().getTime(),
         owner: auth.currentUser.email,
+        price: formData.price,
       };
 
       addDoc(serviceCollection, service)
         .then((docRef) => {
           showNotification("Service added successfully", "success");
-          navigate("/admin/services");
+          navigate("/admin/jobs");
         })
         .catch((error) => {
           showNotification("Error adding service");
@@ -179,6 +180,22 @@ const NewService = () => {
                           />
                         </div>
                       </div>
+                      <div className="col-xl-6 col-lg-6 col-md-6">
+                        <div className="form-group">
+                          <label className="text-dark ft-medium">
+                            Service Price
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control rounded"
+                            placeholder="Price"
+                            name="price"
+                            onChange={handleInputChange}
+                            value={formData.price}
+                            required
+                          />
+                        </div>
+                      </div>
 
                       <div className="col-xl-6 col-lg-6 col-md-6">
                         <div className="form-group">
@@ -193,11 +210,12 @@ const NewService = () => {
                             required
                           >
                             <option defaultValue>Select Service Type</option>
-                            {cleaning_services_types.map((service, index) => (
-                              <option key={index} value={service.value}>
-                                {service.label}
-                              </option>
-                            ))}
+                            {cleaning_services_types
+                              .map((service, index) => (
+                                <option key={index} value={service.value}>
+                                  {service.label}
+                                </option>
+                              ))}
                           </select>
                         </div>
                       </div>

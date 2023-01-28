@@ -14,19 +14,14 @@ const Sidebar = () => {
       link: "/admin/jobs/new",
     },
     {
-      title: "Manage Jobs",
+      title: "Manage Services",
       icon: "lni lni-add-files mr-2",
       link: "/admin/jobs",
     },
     {
-      title: "Manage Applicants",
+      title: "Manage Bookings",
       icon: "lni lni-briefcase mr-2",
-      link: "/admin/applicants",
-    },
-    {
-      title: "Bookmark Resumes",
-      icon: "lni lni-bookmark mr-2",
-      link: "/admin/bookmarks",
+      link: "/admin/bookings",
     },
     {
       title: "Packages",

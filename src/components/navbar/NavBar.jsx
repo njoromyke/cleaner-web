@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { collection, getDocs } from "@firebase/firestore";
 import { auth, database } from "../../services/firebase";
 import { useEffect } from "react";
-import { ADMIN_ROLE } from "../../helpers/constants";
+import { ADMIN_ROLE, SUPER_ADMIN_ROLE } from "../../helpers/constants";
 
 const NavBar = () => {
   const [user, setUser] = useState({});
@@ -23,7 +23,7 @@ const NavBar = () => {
 
   useEffect(getLoggedInUser, [authenticatedUser]);
 
-  const isAdmin = user.role === ADMIN_ROLE;
+  const isAdmin = user.role === ADMIN_ROLE || SUPER_ADMIN_ROLE;
 
   return (
     <>
@@ -31,31 +31,22 @@ const NavBar = () => {
         <div className="container">
           <nav id="navigation" className="navigation navigation-landscape">
             <div className="nav-header">
-              <a className="nav-brand" href="#">
+              <Link to="/" className="nav-brand" href="/">
                 <img src={logo} className="logo" alt="" />
-              </a>
+              </Link>
               <div className="nav-toggle"></div>
               <div className="mobile_nav">
                 <ul>
                   <li>
-                    <a
-                      href="#"
-                      data-toggle="modal"
-                      data-target="#login"
-                      className="theme-cl fs-lg"
-                    >
-                      <i className="lni lni-user"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="dashboard-post-job.html"
+                    <Link
+                      to="/admin/services"
                       className="crs_yuo12 w-auto text-white theme-bg"
                     >
                       <span className="embos_45">
-                        <i className="fas fa-plus-circle mr-1 mr-1"></i>Post Job
+                        <i className="fas fa-plus-circle mr-1 mr-1"></i>Post A
+                        Service
                       </span>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -63,7 +54,7 @@ const NavBar = () => {
             <div className="nav-menus-wrapper">
               <ul className="nav-menu">
                 <li>
-                  <Link to={'/'} >Home</Link>
+                  <Link to={"/"}>Home</Link>
                 </li>
               </ul>
 
@@ -75,9 +66,9 @@ const NavBar = () => {
                     </Link>
                   </li>
                   <li className="add-listing theme-bg">
-                    <a href="dashboard-post-job.html">
-                      <i className="lni lni-circle-plus mr-1"></i> Post a Job
-                    </a>
+                    <Link to={'/admin/jobs/new'} href="dashboard-post-job.html">
+                      <i className="lni lni-circle-plus mr-1"></i> Post a Service
+                    </Link>
                   </li>
                 </ul>
               )}

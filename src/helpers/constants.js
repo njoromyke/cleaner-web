@@ -1,5 +1,5 @@
 export const ADMIN_ROLE = "admin";
-
+export const SUPER_ADMIN_ROLE = "super_admin";
 export const cleaning_services_types = [
   {
     label: "Basic House Cleaning",
