@@ -188,21 +188,22 @@ const Home = () => {
 
           <div className="row align-items-center">
             {services.map((service) => (
-              <>
-                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <Link 
+              
+              to={`/${service.id}`}
+              className="col-xl-3 col-lg-4 col-md-6 col-sm-12"
+              >
+                <>
                   <div className="job_grid border rounded ">
                     <div className="job_grid_thumb mb-3 pt-5 px-3">
-                      <Link
-                        className="d-block text-center m-auto"
-                        to={`/${service.id}`}
-                      >
+                      <div className="d-block text-center m-auto">
                         <img
                           src={service.image}
                           className="img-fluid"
                           width="70"
                           alt=""
                         />
-                      </Link>
+                      </div>
                     </div>
                     <div className="job_grid_caption text-center pb-5 px-3">
                       <div className="position-absolute ab-right">
@@ -212,22 +213,16 @@ const Home = () => {
                       </div>
 
                       <h6 className="mb-0 lh-1 ft-medium medium">
-                        <Link
-                          to={`/${service.id}`}
-                          href="employer-detail.html"
-                          className="text-muted medium"
-                        >
+                        <>
                           <Rating
                             size={14}
                             initialValue={service.ratings}
                             readonly
                           />
-                        </Link>
+                        </>
                       </h6>
                       <h4 className="mb-0 ft-medium medium">
-                        <a href="job-detail.html" className="text-dark fs-md">
-                          {service.title}
-                        </a>
+                        <div className="text-dark fs-md">{service.title}</div>
                       </h4>
                       <div className="jbl_location">
                         <i className="lni lni-map-marker mr-1"></i>
@@ -245,8 +240,8 @@ const Home = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
+                </>
+              </Link>
             ))}
           </div>
         </div>
