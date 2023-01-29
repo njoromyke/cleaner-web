@@ -39,11 +39,11 @@ const Sidebar = () => {
       icon: "lni lni-briefcase mr-2",
       link: "/admin/bookings",
     },
-    {
-      title: "Messages",
-      icon: "lni lni-envelope mr-2",
-      link: "/admin/messages",
-    },
+    // {
+    //   title: "Messages",
+    //   icon: "lni lni-envelope mr-2",
+    //   link: "/admin/messages",
+    // },
     {
       title: "Log Out",
       icon: "lni lni-power-switch mr-2",

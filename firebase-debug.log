@@ -1,0 +1,21 @@
+[debug] [2023-01-29T09:54:04.308Z] ----------------------------------------------------------------------
+[debug] [2023-01-29T09:54:04.310Z] Command:       C:\Users\mnjoroge\DOWNLO~1\firebase-tools-instant-win.exe C:\Users\mnjoroge\.cache\firebase\tools\lib\node_modules\firebase-tools\lib\bin\firebase init
+[debug] [2023-01-29T09:54:04.310Z] CLI Version:   11.21.0
+[debug] [2023-01-29T09:54:04.310Z] Platform:      win32
+[debug] [2023-01-29T09:54:04.310Z] Node Version:  v16.16.0
+[debug] [2023-01-29T09:54:04.311Z] Time:          Sun Jan 29 2023 12:54:04 GMT+0300 (East Africa Time)
+[debug] [2023-01-29T09:54:04.311Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-29T09:54:04.317Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-29T09:54:04.318Z] > authorizing via signed-in user (wanjiku.njoroge2019@students.jkuat.ac.ke)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\mnjoroge\Documents\projects\web\cleaner
+

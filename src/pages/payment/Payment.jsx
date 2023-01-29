@@ -60,8 +60,7 @@ const Payment = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        phone: user.phone,
-        amount: 1,
+        phone: user.phone.replace("0", ""),
       }),
     })
       .then((res) => res.json())

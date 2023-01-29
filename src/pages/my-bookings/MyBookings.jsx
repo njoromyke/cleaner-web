@@ -1,18 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
-    Timestamp,
-    collection,
-    deleteDoc,
-    doc,
-    getDocs
+  Timestamp,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
 import ModalAction from "../../components/modal/ModalTemplate";
 import { showNotification } from "../../helpers/utils/notification";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
 import { database } from "../../services/firebase";
+import ReactToPdf from "react-to-pdf";
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -22,7 +23,7 @@ const MyBookings = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user } = useLoggedInUser();
-  console.log(user.phone);
+  const ref = useRef(null);
 
   const fetchBookings = () => {
     setLoading(true);
@@ -64,7 +65,7 @@ const MyBookings = () => {
   }, [user]);
 
   return (
-    <>
+    <div className="container-xxl">
       <div class="dashboard-widg-bar d-block">
         {loading && <Loader />}
         {showDeleteModal && (
@@ -87,7 +88,7 @@ const MyBookings = () => {
           </ModalAction>
         )}
 
-        <div class="row">
+        <div class="row" ref={ref}>
           <div class="col-xl-12 col-md-12 col-sm-12">
             <div class="cl-justify">
               <div class="cl-justify-first">
@@ -111,6 +112,7 @@ const MyBookings = () => {
               </div>
             </div>
           </div>
+
           <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="mb-4 tbl-lg rounded overflow-hidden">
               <div class="table-responsive bg-white">
@@ -188,10 +190,10 @@ const MyBookings = () => {
                             </span>
                           )}
                         </td>
-                        <td> {booking.clientName}</td>
+                        <td> {booking.phone}</td>
                         <td>
                           <div className="dash-action">
-                            {!booking.paymentStatus && (
+                            {booking.paymentStatus === "pending" && (
                               <Link
                                 to={`/payments/${booking.id}`}
                                 role={"button"}
@@ -221,55 +223,24 @@ const MyBookings = () => {
                   </tbody>
                 </table>
               </div>
+              <ReactToPdf
+                targetRef={ref}
+                filename={`${Date.now()}-bookings.pdf`}
+                x={0.4}
+                y={0.4}
+                scale={0.7}
+              >
+                {({ toPdf }) => (
+                  <button className="btn btn-primary float-end" onClick={toPdf}>
+                    Generate pdf
+                  </button>
+                )}
+              </ReactToPdf>
             </div>
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="" aria-label="Previous">
-                  <span class="fas fa-arrow-circle-right"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  1
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  2
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">
-                  3
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  ...
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  18
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span class="fas fa-arrow-circle-right"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 
