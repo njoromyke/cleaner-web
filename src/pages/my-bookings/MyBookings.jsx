@@ -163,7 +163,7 @@ const MyBookings = () => {
                           )}
                         </td>
                         <td>
-                          {booking.completionStatus === "completed" ? (
+                          {booking.completed ? (
                             <span class="badge text-bg-success">
                               <i class="lni lni-checkmark-circle"></i> Completed
                             </span>

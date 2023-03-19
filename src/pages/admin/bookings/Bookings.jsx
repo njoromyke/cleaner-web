@@ -1,12 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {
-  Timestamp,
-  collection,
-  deleteDoc,
-  getDocs,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import { Timestamp, collection, deleteDoc, getDocs, doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { database } from "../../../services/firebase";
 import { useEffect } from "react";
@@ -53,22 +46,22 @@ const Bookings = () => {
       .finally(() => setLoading(false));
   };
 
-    const handleComplete = () => {
-      setLoading(true);
+  const handleComplete = () => {
+    setLoading(true);
 
-      updateDoc(doc(database, "bookings", selectedBooking.id), {
-        completed: true,
-        completedAt: Timestamp.now(),
+    updateDoc(doc(database, "bookings", selectedBooking.id), {
+      completed: true,
+      completedAt: Timestamp.now(),
+    })
+      .then(() => {
+        showNotification("Booking completed successfully", "success");
+        fetchBookings();
       })
-        .then(() => {
-          showNotification("Booking completed successfully", "success");
-          fetchBookings();
-        })
-        .catch((error) => {
-          showNotification(error.message);
-        })
-        .finally(() => setLoading(false));
-    };
+      .catch((error) => {
+        showNotification(error.message);
+      })
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
     fetchBookings();
@@ -122,8 +115,7 @@ const Bookings = () => {
             <div class="cl-justify">
               <div class="cl-justify-first">
                 <p class="m-0 p-0 ft-sm">
-                  You have{" "}
-                  <span class="text-dark ft-medium">{bookings?.length} </span>
+                  You have <span class="text-dark ft-medium">{bookings?.length} </span>
                   bookings
                 </p>
               </div>
@@ -163,9 +155,7 @@ const Bookings = () => {
                           <div class="cats-box rounded bg-white d-flex align-items-center">
                             <div class="text-center"></div>
                             <div class="cats-box-caption px-2">
-                              <h4 class="fs-md mb-0 ft-medium">
-                                {booking.serviceTitle}
-                              </h4>
+                              <h4 class="fs-md mb-0 ft-medium">{booking.serviceTitle}</h4>
                               <div class="d-block mb-2 position-relative">
                                 <span class="text-muted medium">
                                   <i class="lni lni-map-marker mr-1"></i>
@@ -191,7 +181,7 @@ const Bookings = () => {
                           )}
                         </td>
                         <td>
-                          {booking.completionStatus === "completed" ? (
+                          {booking.completed ? (
                             <span class="badge text-bg-success">
                               <i class="lni lni-checkmark-circle"></i> Completed
                             </span>
@@ -201,17 +191,11 @@ const Bookings = () => {
                             </span>
                           )}
                         </td>
-                        <td>
-                          {Timestamp.fromDate(booking.createdAt.toDate())
-                            .toDate()
-                            .toLocaleString()}
-                        </td>
+                        <td>{Timestamp.fromDate(booking.createdAt.toDate()).toDate().toLocaleString()}</td>
 
                         <td>
                           {booking.completedAt ? (
-                            Timestamp.fromDate(booking.completedAt.toDate())
-                              .toDate()
-                              .toLocaleString()
+                            Timestamp.fromDate(booking.completedAt.toDate()).toDate().toLocaleString()
                           ) : (
                             <span class="badge text-bg-danger">
                               <i class="lni lni-close-circle"></i> Uncompleted
