@@ -67,6 +67,8 @@ const Bookings = () => {
     fetchBookings();
   }, []);
 
+  console.log(selectedBooking, "selectedBooking");
+
   return (
     <>
       <div class="dashboard-widg-bar d-block">
@@ -202,7 +204,7 @@ const Bookings = () => {
                             </span>
                           )}
                         </td>
-                        <td> {booking.clientName}</td>
+                        <td> {booking.client}</td>
                         <td>
                           <div className="dash-action">
                             {!booking.completed && (
@@ -222,7 +224,7 @@ const Bookings = () => {
                               className="p-2 circle text-danger bg-light-danger d-inline-flex align-items-center justify-content-center ml-1"
                               onClick={() => {
                                 setShowDeleteModal(true);
-                                selectedBooking(booking.id);
+                                setSelectedBooking(booking);
                               }}
                             >
                               <i className="lni lni-trash-can"></i>
@@ -235,50 +237,6 @@ const Bookings = () => {
                 </table>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="" aria-label="Previous">
-                  <span class="fas fa-arrow-circle-right"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  1
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  2
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">
-                  3
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  ...
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  18
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span class="fas fa-arrow-circle-right"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
       </div>

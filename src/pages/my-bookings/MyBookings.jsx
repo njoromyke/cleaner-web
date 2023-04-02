@@ -190,7 +190,7 @@ const MyBookings = () => {
                             </span>
                           )}
                         </td>
-                        <td> {booking.phone}</td>
+                        <td> {booking.client}</td>
                         <td>
                           <div className="dash-action">
                             {booking.paymentStatus === "pending" && (
