@@ -45,10 +45,13 @@ const NewService = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    if (!formData.title || !formData.image || !formData.type || !formData.location || !formData.description)
+    if (!formData.title || !formData.image || !formData.type || !formData.location || !formData.description) {
       showNotification("Please fill all fields");
+      return;
+    }
+
+    setLoading(true);
 
     const serviceCollection = collection(database, "services");
 
@@ -226,6 +229,7 @@ const NewService = () => {
                             onChange={handleInputChange}
                             value={formData.location}
                           >
+                            <option defaultValue>Select Service County</option>
                             {counties.map((location, index) => (
                               <option key={index} value={location.name}>
                                 {location.name}
@@ -255,6 +259,7 @@ const NewService = () => {
                           }}
                           latitude={latLng.lat}
                           longitude={latLng.lng}
+                          showSearch
                         />
                       </div>
                       <div className="col-12 mt-5">

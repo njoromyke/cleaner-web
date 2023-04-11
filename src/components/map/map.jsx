@@ -3,13 +3,15 @@ import mapboxgl from "mapbox-gl";
 
 mapboxgl.accessToken = "pk.eyJ1IjoibXlrZXNvZnR3YXJlIiwiYSI6ImNsMzFsNnkxaTBiZDQzY3A5bTJoaDA1dG4ifQ.YQJG-0N34EOJ6g6TxlWNgw";
 
-const Map = ({ dragablemarker: draggableMarker, latitude, longitude, onDrag }) => {
+const Map = ({ dragablemarker: draggableMarker, latitude, longitude, onDrag, showSearch }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(longitude || 37.0144);
   const [lat, setLat] = useState(latitude || -1.102554);
   const [zoom, setZoom] = useState(17);
   const marker = useRef(null);
+
+  const searchInput = useRef(null);
 
   console.log(lng, lat, "latitude, longitude");
 
@@ -51,42 +53,68 @@ const Map = ({ dragablemarker: draggableMarker, latitude, longitude, onDrag }) =
     setZoom(map.current.getZoom().toFixed(2));
   };
 
-  useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on("move", () => {
-      setLng(map.current.getCenter().lng.toFixed(4));
-      setLat(map.current.getCenter().lat.toFixed(4));
-      setZoom(map.current.getZoom().toFixed(2));
-    });
-  });
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const query = searchInput.current.value;
+    if (query) {
+      // Use Mapbox Geocoding API to search for location
+      fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${mapboxgl.accessToken}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.features && data.features.length > 0) {
+            const [lng, lat] = data.features[0].center;
+            map.current.flyTo({
+              center: [lng, lat],
+              zoom: 17,
+              essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+            });
+            setLng(lng.toFixed(4));
+            setLat(lat.toFixed(4));
+            marker.current.setLngLat([lng, lat]);
+            onDrag({ lng, lat });
+          } else {
+            alert("Location not found. Please try again.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error searching for location:", error);
+        });
+    } else {
+      alert("Please enter a location to search.");
+    }
+    searchInput.current.value = "";
+  };
 
   useEffect(() => {
     if (latitude && longitude) {
       map.current.flyTo({
         center: [longitude, latitude],
+        zoom: 17,
         essential: true, // this animation is considered essential with respect to prefers-reduced-motion
       });
-
-      setLng(longitude);
-      setLat(latitude);
-
+      setLng(longitude.toFixed(4));
+      setLat(latitude.toFixed(4));
       marker.current.setLngLat([longitude, latitude]);
     }
   }, [latitude, longitude]);
 
   return (
-    <div ref={mapContainer} className="map-container position-relative">
-      <div className="lat-lng">
-        <span className="lat">Lat: {lat}</span>
-        <span className="lng ps-3">Lng: {lng}</span>
-      </div>
-
-      <div className="zoom-buttons">
-        <button className="btn btn-sm btn-primary" onClick={zoomIn} disabled={zoom === 20}>
-          <i className="fas fa-plus"></i>
+    <div>
+      {showSearch && (
+        <form className="row mb-3">
+          <input ref={searchInput} type="text" placeholder="Search location" className="form-control form-control-sm col-10" />
+          <button className="col-2 btn btn-sm btn-success" onClick={handleSearch}>
+            <i className="fa fa-search" />
+          </button>
+        </form>
+      )}
+      <div ref={mapContainer} className="map-container" />
+      <div className="map-controls mt-3">
+        <button className="btn btn-success btn-sm me-2" onClick={zoomIn}>
+          <i className="fa fa-plus" />
         </button>
-        <button className="btn btn-sm btn-primary" disabled={zoom === 0} onClick={zoomOut}>
-          <i className="fas fa-minus"></i>
+        <button className="btn btn-success btn-sm me-2" onClick={zoomOut}>
+          <i className="fa fa-minus" />
         </button>
       </div>
     </div>
