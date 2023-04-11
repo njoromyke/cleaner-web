@@ -122,7 +122,7 @@ const ViewListing = () => {
                             {service.location}
                           </span>
                           <span class="medium ft-medium text-warning ml-3">
-                            Ksh - {service.price}
+                            Ksh : {service.price}
                           </span>
                         </div>
                         <div class="jbl_info01">
