@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../components/loader/Loader";
@@ -6,12 +6,16 @@ import { counties } from "../../../data/conties";
 import { cleaning_services_types } from "../../../helpers/constants";
 import { showNotification } from "../../../helpers/utils/notification";
 import { auth, database } from "../../../services/firebase";
+import Map from "../../../components/map/map";
 
 const NewService = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [latLng, setLatLng] = useState({ lat: "", lng: "" });
   const navigate = useNavigate();
   const { id } = useParams();
+
+  console.log(latLng);
 
   const fetchJob = () => {
     setLoading(true);
@@ -20,6 +24,10 @@ const NewService = () => {
       .then((doc) => {
         if (doc.exists()) {
           setFormData(doc.data());
+          setLatLng({
+            lat: doc.data().location_coordinates.lat,
+            lng: doc.data().location_coordinates.lng,
+          });
         } else {
           showNotification("Service not found");
         }
@@ -39,18 +47,13 @@ const NewService = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (
-      !formData.title ||
-      !formData.image ||
-      !formData.type ||
-      !formData.location ||
-      !formData.description
-    )
+    if (!formData.title || !formData.image || !formData.type || !formData.location || !formData.description)
       showNotification("Please fill all fields");
 
     const serviceCollection = collection(database, "services");
 
     if (id) {
+      console.log(latLng, "lalng");
       const service = {
         title: formData.title,
         image: formData.image,
@@ -61,6 +64,8 @@ const NewService = () => {
         reviews: formData.reviews,
         createdAt: formData.createdAt,
         owner: formData.owner,
+        price: formData.price,
+        location_coordinates: latLng,
       };
 
       updateDoc(doc(database, "services", id), service)
@@ -86,7 +91,10 @@ const NewService = () => {
         price: formData.price,
       };
 
-      addDoc(serviceCollection, service)
+      addDoc(serviceCollection, {
+        ...service,
+        location_coordinates: latLng,
+      })
         .then((docRef) => {
           showNotification("Service added successfully", "success");
           navigate("/admin/jobs");
@@ -137,8 +145,7 @@ const NewService = () => {
               <div className="_dashboard_content_header br-bottom py-3 px-3">
                 <div className="_dashboard__header_flex">
                   <h4 className="mb-0 ft-medium fs-md">
-                    <i className="fa fa-file mr-1 theme-cl fs-sm"></i>Post A New
-                    Service
+                    <i className="fa fa-file mr-1 theme-cl fs-sm"></i>Post A New Service
                   </h4>
                 </div>
               </div>
@@ -149,9 +156,7 @@ const NewService = () => {
                     <div className="row">
                       <div className="col-xl-6 col-lg-6 col-md-6">
                         <div className="form-group">
-                          <label className="text-dark ft-medium">
-                            Service Title
-                          </label>
+                          <label className="text-dark ft-medium">Service Title</label>
                           <input
                             type="text"
                             className="form-control rounded"
@@ -165,9 +170,7 @@ const NewService = () => {
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6">
                         <div className="form-group">
-                          <label className="text-dark ft-medium">
-                            Service Image
-                          </label>
+                          <label className="text-dark ft-medium">Service Image</label>
                           <input
                             type="text"
                             className="form-control rounded"
@@ -181,9 +184,7 @@ const NewService = () => {
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6">
                         <div className="form-group">
-                          <label className="text-dark ft-medium">
-                            Service Price
-                          </label>
+                          <label className="text-dark ft-medium">Service Price</label>
                           <input
                             type="number"
                             className="form-control rounded"
@@ -198,9 +199,7 @@ const NewService = () => {
 
                       <div className="col-xl-6 col-lg-6 col-md-6">
                         <div className="form-group">
-                          <label className="text-dark ft-medium">
-                            Service Type
-                          </label>
+                          <label className="text-dark ft-medium">Service Type</label>
                           <select
                             className="form-control rounded"
                             name="type"
@@ -209,20 +208,17 @@ const NewService = () => {
                             required
                           >
                             <option defaultValue>Select Service Type</option>
-                            {cleaning_services_types
-                              .map((service, index) => (
-                                <option key={index} value={service.value}>
-                                  {service.label}
-                                </option>
-                              ))}
+                            {cleaning_services_types.map((service, index) => (
+                              <option key={index} value={service.value}>
+                                {service.label}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>
                       <div className="col-xl-6 col-lg-6 col-md-6">
                         <div className="form-group">
-                          <label className="text-dark ft-medium">
-                            Service County
-                          </label>
+                          <label className="text-dark ft-medium">Service County</label>
                           <select
                             required
                             className="form-control rounded"
@@ -241,9 +237,7 @@ const NewService = () => {
 
                       <div className="col-xl-12 col-lg-12 col-md-12">
                         <div className="form-group">
-                          <label className="text-dark ft-medium">
-                            Service Description
-                          </label>
+                          <label className="text-dark ft-medium">Service Description</label>
                           <textarea
                             required
                             className="form-control rounded"
@@ -254,12 +248,18 @@ const NewService = () => {
                           ></textarea>
                         </div>
                       </div>
-                      <div className="col-12">
+                      <div className="col-xl-12 col-lg-12 col-md-12">
+                        <Map
+                          onDrag={(value) => {
+                            setLatLng(value);
+                          }}
+                          latitude={latLng.lat}
+                          longitude={latLng.lng}
+                        />
+                      </div>
+                      <div className="col-12 mt-5">
                         <div className="form-group">
-                          <button
-                            type="submit"
-                            className="btn btn-md ft-medium text-light rounded theme-bg"
-                          >
+                          <button type="submit" className="btn btn-md ft-medium text-light rounded theme-bg">
                             Publish Job
                           </button>
                         </div>

@@ -18,6 +18,7 @@ import { showNotification } from "../../helpers/utils/notification";
 import { auth, database } from "../../services/firebase";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
 import Loader from "../../components/loader/Loader";
+import Map from "../../components/map/map";
 
 const ViewListing = () => {
   const [service, setService] = useState({});
@@ -71,6 +72,8 @@ const ViewListing = () => {
     getService();
   }, [id]);
 
+  console.log(service);
+
   return (
     <>
       {loading && <Loader />}
@@ -103,32 +106,21 @@ const ViewListing = () => {
                   <div class="jbd-01 d-flex align-items-center justify-content-between">
                     <div class="jbd-flex d-flex align-items-center justify-content-start">
                       <div class="jbd-01-thumb">
-                        <img
-                          src={service.image}
-                          class="img-fluid"
-                          width="90"
-                          alt=""
-                        />
+                        <img src={service.image} class="img-fluid" width="90" alt="" />
                       </div>
                       <div class="jbd-01-caption pl-3">
                         <div class="tbd-title">
-                          <h4 class="mb-0 ft-medium fs-md text-black">
-                            {service.title}
-                          </h4>
+                          <h4 class="mb-0 ft-medium fs-md text-black">{service.title}</h4>
                         </div>
                         <div class="jbl_location mb-3">
                           <span>
                             <i class="lni lni-map-marker mr-1"></i>
                             {service.location}
                           </span>
-                          <span class="medium ft-medium text-warning ml-3">
-                            Ksh : {service.price}
-                          </span>
+                          <span class="medium ft-medium text-warning ml-3">Ksh : {service.price}</span>
                         </div>
                         <div class="jbl_info01">
-                          <span class="px-2 py-1 ft-medium medium rounded theme-cl theme-bg-light mr-2">
-                            {service.type}
-                          </span>
+                          <span class="px-2 py-1 ft-medium medium rounded theme-cl theme-bg-light mr-2">{service.type}</span>
                         </div>
                       </div>
                     </div>
@@ -142,54 +134,45 @@ const ViewListing = () => {
                       <p className="text-black-50">{service.description}</p>
                     </div>
                   </div>
+                  <div class="jbd-01 px-3 py-4">
+                    <div class="mb-4">
+                      <h5 class="ft-medium fs-md text-black"> Location</h5>
+                      <Map
+                        latitude={service.location_coordinates?.lat}
+                        longitude={service.location_coordinates?.lng}
+                        dragablemarker={false}
+                      />
+                    </div>
+                  </div>
 
                   <div class="jbd-02 px-3 py-3 br-top">
                     <div class="jbd-02-flex d-flex align-items-center justify-content-between">
                       <div class="jbd-02-social">
-                        <h5 class="ft-medium fs-md text-black">
-                          Share this service
-                        </h5>
+                        <h5 class="ft-medium fs-md text-black">Share this service</h5>
 
                         <ul class="jbd-social">
                           <li>
-                            <FacebookShareButton
-                              quote={service.title}
-                              hashtag={`#${service.title}`}
-                              url={window.location.href}
-                            >
+                            <FacebookShareButton quote={service.title} hashtag={`#${service.title}`} url={window.location.href}>
                               <FacebookIcon size={32} round />
                             </FacebookShareButton>
                           </li>
                           <li>
-                            <TwitterShareButton
-                              title={service.title}
-                              hashtags={[service.title]}
-                              url={window.location.href}
-                            >
+                            <TwitterShareButton title={service.title} hashtags={[service.title]} url={window.location.href}>
                               <TwitterIcon size={32} round />
                             </TwitterShareButton>
                           </li>
                           <li>
-                            <WhatsappShareButton
-                              title={service.title}
-                              url={window.location.href}
-                            >
+                            <WhatsappShareButton title={service.title} url={window.location.href}>
                               <WhatsappIcon size={32} round />
                             </WhatsappShareButton>
                           </li>
                           <li>
-                            <LinkedinShareButton
-                              title={service.title}
-                              url={window.location.href}
-                            >
+                            <LinkedinShareButton title={service.title} url={window.location.href}>
                               <LinkedinIcon size={32} round />
                             </LinkedinShareButton>
                           </li>
                           <li>
-                            <TelegramShareButton
-                              title={service.title}
-                              url={window.location.href}
-                            >
+                            <TelegramShareButton title={service.title} url={window.location.href}>
                               <TelegramIcon size={32} round />
                             </TelegramShareButton>
                           </li>
@@ -197,10 +180,7 @@ const ViewListing = () => {
                       </div>
                       <div class="jbd-02-aply">
                         <div class="jbl_button mb-2">
-                          <button
-                            class="btn btn-md rounded theme-bg text-light fs-sm ft-medium"
-                            onClick={bookService}
-                          >
+                          <button class="btn btn-md rounded theme-bg text-light fs-sm ft-medium" onClick={bookService}>
                             Book This Service
                           </button>
                         </div>
@@ -214,9 +194,7 @@ const ViewListing = () => {
                 <div class="jb-apply-form bg-white rounded py-3 px-4 box-static">
                   <div class="hide-1023">
                     <div class="jbl_button mb-2" onClick={bookService}>
-                      <a class="btn rounded theme-bg-light theme-cl fs-sm ft-medium">
-                        Book Now
-                      </a>
+                      <div class="btn rounded theme-bg-light theme-cl fs-sm ft-medium">Book Now</div>
                     </div>
                   </div>
                 </div>

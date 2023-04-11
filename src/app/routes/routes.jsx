@@ -10,6 +10,7 @@ import Users from "../../pages/admin/users/Users";
 import ViewListing from "../../pages/home/ViewListing";
 import Payment from "../../pages/payment/Payment";
 import MyBookings from "../../pages/my-bookings/MyBookings";
+import ViewPdf from "../../pages/pdf/ViewPdf";
 
 function RouterComponent() {
   const routes = [
@@ -31,11 +32,16 @@ function RouterComponent() {
       element: <MyBookings />,
     },
     {
+      path: "pdf",
+      element: <ViewPdf />,
+    },
+
+    {
       path: "admin",
       element: <Dashboard />,
       children: [
         {
-          path: "dashboard",
+          path: "/admin/dashboard",
           element: <DashboardPage />,
           index: true,
         },
@@ -66,12 +72,7 @@ function RouterComponent() {
   return (
     <Routes>
       {routes.map((route, index) => (
-        <Route
-          key={index}
-          path={route.path}
-          element={route.element}
-          index={route.index}
-        >
+        <Route key={index} path={route.path} element={route.element} index={route.index}>
           {route.children && (
             <>
               {route.children.map((child, index) => (

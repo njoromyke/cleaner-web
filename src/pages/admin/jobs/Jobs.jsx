@@ -7,6 +7,7 @@ import { formatTimeAgo } from "../../../helpers/utils/date";
 import { showNotification } from "../../../helpers/utils/notification";
 import useLoggedInUser from "../../../hooks/useLoggedInUser";
 import { database } from "../../../services/firebase";
+import papa from "papaparse";
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -59,6 +60,16 @@ const Jobs = () => {
     navigate(`/admin/jobs/edit/${id}`);
   };
 
+  const handleDownload = () => {
+    const csv = papa.unparse(jobs);
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "bookings.csv");
+    link.click();
+  };
+
   useEffect(() => {
     fetchJobs();
   }, []);
@@ -106,11 +117,7 @@ const Jobs = () => {
                 <p className="mb-1 theme-cl">Image</p>
               </div>
               <div className="col-md-6">
-                <img
-                  src={selectedProduct?.image}
-                  alt=""
-                  className="avatar rounded-5"
-                />
+                <img src={selectedProduct?.image} alt="" className="avatar rounded-5" />
               </div>
               <div className="col-md-6">
                 <p className="mb-1 theme-cl">Location</p>
@@ -122,9 +129,7 @@ const Jobs = () => {
                 <p className="mb-1 theme-cl">Posted At</p>
               </div>
               <div className="col-md-6">
-                <p className="mb-1">
-                  {formatTimeAgo(selectedProduct?.createdAt)}
-                </p>
+                <p className="mb-1">{formatTimeAgo(selectedProduct?.createdAt)}</p>
               </div>
               <div className="col-md-6">
                 <p className="mb-1 theme-cl">Ratings</p>
@@ -150,8 +155,10 @@ const Jobs = () => {
 
         <div className="row">
           <div className="col-xl-12 col-lg-12 col-md-12">
-            <div className="d-flex align-items-center p-3 alert alert-danger">
-              Your listings will be automatically removed after 30 days.
+            <div className="d-flex justify-content-end align-items-center p-3">
+              <button className="btn btn-success" onClick={handleDownload}>
+                Export CSV <i className="fas fa-download ml-2"></i>
+              </button>
             </div>
             <div className="mb-4 tbl-lg rounded overflow-hidden">
               <div className="table-responsive bg-white">
@@ -171,19 +178,13 @@ const Jobs = () => {
                       <tr key={job.id}>
                         <td>
                           <div className="dash-title">
-                            <h4 className="mb-0 ft-medium fs-sm">
-                              {job.title}
-                            </h4>
+                            <h4 className="mb-0 ft-medium fs-sm">{job.title}</h4>
                           </div>
                         </td>
                         <td>
                           <div className="dash-filled">
                             <span className="p-2 circle gray d-inline-flex align-items-center justify-content-center">
-                              <img
-                                src={job.image}
-                                alt=""
-                                className="avatar rounded-5"
-                              />
+                              <img src={job.image} alt="" className="avatar rounded-5" />
                             </span>
                           </div>
                         </td>
@@ -196,9 +197,7 @@ const Jobs = () => {
                         </td>
                         <td>{job.type}</td>
                         <td>
-                          <div className="theme-bg text-light rounded px-3 py-2 ft-medium">
-                            {job.location}
-                          </div>
+                          <div className="theme-bg text-light rounded px-3 py-2 ft-medium">{job.location}</div>
                         </td>
                         <td>
                           <div className="dash-action">

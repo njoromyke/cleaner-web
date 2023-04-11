@@ -1,11 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {
-  Timestamp,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-} from "firebase/firestore";
+import { Timestamp, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
@@ -13,17 +7,18 @@ import ModalAction from "../../components/modal/ModalTemplate";
 import { showNotification } from "../../helpers/utils/notification";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
 import { database } from "../../services/firebase";
-import ReactToPdf from "react-to-pdf";
+import { useNavigate } from "react-router-dom";
+import papa from "papaparse";
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const bookingsCollection = collection(database, "bookings");
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { user } = useLoggedInUser();
   const ref = useRef(null);
+  const navigate = useNavigate();
 
   const fetchBookings = () => {
     setLoading(true);
@@ -34,9 +29,7 @@ const MyBookings = () => {
           bookings.push({ ...doc.data(), id: doc.id });
         });
 
-        const myBookings = bookings.filter(
-          (booking) => booking.client == user.phone
-        );
+        const myBookings = bookings.filter((booking) => booking.client == user.phone);
 
         setBookings(myBookings);
       })
@@ -58,6 +51,16 @@ const MyBookings = () => {
         showNotification(error.message);
       })
       .finally(() => setLoading(false));
+  };
+
+  const handleDownload = () => {
+    const csv = papa.unparse(bookings);
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "bookings.csv");
+    link.click();
   };
 
   useEffect(() => {
@@ -93,8 +96,7 @@ const MyBookings = () => {
             <div class="cl-justify">
               <div class="cl-justify-first">
                 <p class="m-0 p-0 ft-sm">
-                  You have{" "}
-                  <span class="text-dark ft-medium">{bookings?.length} </span>
+                  You have <span class="text-dark ft-medium">{bookings?.length} </span>
                   bookings
                 </p>
               </div>
@@ -135,9 +137,7 @@ const MyBookings = () => {
                           <div class="cats-box rounded bg-white d-flex align-items-center">
                             <div class="text-center"></div>
                             <div class="cats-box-caption px-2">
-                              <h4 class="fs-md mb-0 ft-medium">
-                                {booking.serviceTitle}
-                              </h4>
+                              <h4 class="fs-md mb-0 ft-medium">{booking.serviceTitle}</h4>
                               <div class="d-block mb-2 position-relative">
                                 <span class="text-muted medium">
                                   <i class="lni lni-map-marker mr-1"></i>
@@ -173,17 +173,11 @@ const MyBookings = () => {
                             </span>
                           )}
                         </td>
-                        <td>
-                          {Timestamp.fromDate(booking.createdAt.toDate())
-                            .toDate()
-                            .toLocaleString()}
-                        </td>
+                        <td>{Timestamp.fromDate(booking.createdAt.toDate()).toDate().toLocaleString()}</td>
 
                         <td>
                           {booking.completedAt ? (
-                            Timestamp.fromDate(booking.completedAt.toDate())
-                              .toDate()
-                              .toLocaleString()
+                            Timestamp.fromDate(booking.completedAt.toDate()).toDate().toLocaleString()
                           ) : (
                             <span class="badge text-bg-danger">
                               <i class="lni lni-close-circle"></i> Uncompleted
@@ -211,7 +205,7 @@ const MyBookings = () => {
                               className="p-2 circle text-danger bg-light-danger d-inline-flex align-items-center justify-content-center ml-1"
                               onClick={() => {
                                 setShowDeleteModal(true);
-                                selectedBooking(booking.id);
+                                setSelectedBooking(booking);
                               }}
                             >
                               <i className="lni lni-trash-can"></i>
@@ -223,19 +217,10 @@ const MyBookings = () => {
                   </tbody>
                 </table>
               </div>
-              <ReactToPdf
-                targetRef={ref}
-                filename={`${Date.now()}-bookings.pdf`}
-                x={0.4}
-                y={0.4}
-                scale={0.7}
-              >
-                {({ toPdf }) => (
-                  <button className="btn btn-primary float-end" onClick={toPdf}>
-                    Generate pdf
-                  </button>
-                )}
-              </ReactToPdf>
+
+              <button onClick={handleDownload} className="btn btn-primary float-end">
+                Export to Excel
+              </button>
             </div>
           </div>
         </div>
