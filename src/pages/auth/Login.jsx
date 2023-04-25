@@ -6,7 +6,10 @@ import Loader from "../../components/loader/Loader";
 import { auth } from "../../services/firebase";
 
 const Login = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: "myke@gmail.com",
+    password: 123456,
+  });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -42,13 +45,7 @@ const Login = () => {
               <form className="border p-3 rounded" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>User Email *</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    placeholder="Email*"
-                    onChange={handleChange}
-                    name="email"
-                  />
+                  <input type="email" className="form-control" placeholder="Email*" onChange={handleChange} name="email" />
                 </div>
 
                 <div className="form-group">
@@ -74,10 +71,7 @@ const Login = () => {
                 </div>
 
                 <div className="form-group">
-                  <button
-                    type="submit"
-                    className="btn btn-md full-width theme-bg text-light fs-md ft-medium"
-                  >
+                  <button type="submit" className="btn btn-md full-width theme-bg text-light fs-md ft-medium">
                     Login
                   </button>
                 </div>
