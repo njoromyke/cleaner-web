@@ -45,7 +45,14 @@ const Login = () => {
               <form className="border p-3 rounded" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>User Email *</label>
-                  <input type="email" className="form-control" placeholder="Email*" onChange={handleChange} name="email" />
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={formData.email}
+                    placeholder="Email*"
+                    onChange={handleChange}
+                    name="email"
+                  />
                 </div>
 
                 <div className="form-group">
@@ -56,6 +63,7 @@ const Login = () => {
                     placeholder="Password*"
                     onChange={handleChange}
                     name="password"
+                    value={formData.password}
                   />
                 </div>
 
