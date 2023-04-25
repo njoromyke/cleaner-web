@@ -7,7 +7,7 @@ import { auth } from "../../services/firebase";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "myke@gmail.com",
+    email: "mykenjoroge01@gmail.com",
     password: 123456,
   });
   const [loading, setLoading] = useState(false);
